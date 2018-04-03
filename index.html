@@ -226,6 +226,694 @@
 
 
   
+    <article id="post-2017-11-24-一天入门redis-RDB、AOF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/24/2017-11-24-一天入门redis-RDB、AOF/">一天入门redis-RDB、AOF</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/24/2017-11-24-一天入门redis-RDB、AOF/" class="archive-article-date">
+  	<time datetime="2017-11-24T03:50:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>RDB是什么？每隔一段时间将内存中的数据集快照写入硬盘中(二进制形式)。如果需要恢复，则在将其读到内存中。大概是怎么做的？redis会fork一个进程来持久化，先创建临时文件，等写入工作完成后，替换掉上次的快照文件(dump.rdb文件，位于src目录下)。该过程中redis不执行任何IO操作，以确保较好的性能。什么是Fork？拷贝当前的进程，保持变量、环境变量、程序计算器不变，但是作为远进程的子进</p>
+        
+          <a class="article-more-a" href="/2017/11/24/2017-11-24-一天入门redis-RDB、AOF/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/24/2017-11-24-一天入门redis-RDB、AOF/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-11-23-使用反射获取class并生成相应代码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/23/2017-11-23-使用反射获取class并生成相应代码/">使用反射获取class并生成相应代码</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/23/2017-11-23-使用反射获取class并生成相应代码/" class="archive-article-date">
+  	<time datetime="2017-11-23T02:32:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>package practice1;public class Person{<br>    private String name;<br>    private String sex;<br>    private Integer age;<br>    private String idNo;<br>    private Boolean isMerried;<br>    public String getName() {</p>
+        
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-使用反射获取class并生成相应代码/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">class</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-使用反射获取class并生成相应代码/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-11-23-序列化对象后单例模式被破坏解决方案" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/23/2017-11-23-序列化对象后单例模式被破坏解决方案/">序列化对象后单例模式被破坏解决方案</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/23/2017-11-23-序列化对象后单例模式被破坏解决方案/" class="archive-article-date">
+  	<time datetime="2017-11-23T02:31:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>package org.ddd.section7.example7_6;import java.io.Serializable;public class Earth implements Serializable{<br>    private static final long serialVersionUID = 1L;<br>    private volatile static Earth instan</p>
+        
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-序列化对象后单例模式被破坏解决方案/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">对象</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">class</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-序列化对象后单例模式被破坏解决方案/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-11-23-java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/23/2017-11-23-java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版/">java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/23/2017-11-23-java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版/" class="archive-article-date">
+  	<time datetime="2017-11-23T02:30:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><dependency><br>                <groupid>net.sf.json-lib</groupid><br>                <artifactid>json-lib</artifactid><br>                <version>2.4</version><br>                <classifier>jdk15</classifier></dependency></p>
+        
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jdk</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-11-23-JAVA-任意对象转换成JSON，json转换成指定对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/23/2017-11-23-JAVA-任意对象转换成JSON，json转换成指定对象/">JAVA-任意对象转换成JSON，json转换成指定对象</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/23/2017-11-23-JAVA-任意对象转换成JSON，json转换成指定对象/" class="archive-article-date">
+  	<time datetime="2017-11-23T02:29:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>任意对象转换成JSON只支持字符和基本类型代码package ztf.question3;public class Address {<br>    private String province;<br>    private String street;<br>    public Address() {    }<br>    public Address(String pro,String street){</p>
+        
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-JAVA-任意对象转换成JSON，json转换成指定对象/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">对象</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">class</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/23/2017-11-23-JAVA-任意对象转换成JSON，json转换成指定对象/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-08-15-基于JAVAFX仿网易云音乐播放器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/15/2017-08-15-基于JAVAFX仿网易云音乐播放器/">基于JAVAFX仿网易云音乐播放器</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/15/2017-08-15-基于JAVAFX仿网易云音乐播放器/" class="archive-article-date">
+  	<time datetime="2017-08-15T03:55:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>与网易云相仿的界面，以酷炫黑为主题，加入歌词的滚动，以及加入了网易云没有的动画效果。能够播放MP3，flac两种网易云播放器使用的格式，界面逻辑控制基本与网易云一致，包括上一首、下一首、播放暂停、播放全部、四种不同的播放循环模式、设为我的喜爱等功能，支持更多格式，包括wav,ape,wavpack,au,aiff等格式的支持，以及对歌词滚动的控制。完成对Flac、MP3两种格式的元数据解析(包括图片</p>
+        
+          <a class="article-more-a" href="/2017/08/15/2017-08-15-基于JAVAFX仿网易云音乐播放器/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">javafx</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/15/2017-08-15-基于JAVAFX仿网易云音乐播放器/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-08-07-PowerDesigner16.5 自定义默认值去除引号" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/07/2017-08-07-PowerDesigner16.5 自定义默认值去除引号/">PowerDesigner16.5 自定义默认值去除引号</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/07/2017-08-07-PowerDesigner16.5 自定义默认值去除引号/" class="archive-article-date">
+  	<time datetime="2017-08-07T00:51:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Database -&gt; Edit Currnet DBMS -&gt; Script -&gt; Sql -&gt; Sytax </p>
+<p> 不知道为什么找不到别的教程说的 Format -&gt; CaseSensitivityUsingQuote</p>
+        
+          <a class="article-more-a" href="/2017/08/07/2017-08-07-PowerDesigner16.5 自定义默认值去除引号/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">powerdesigner</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/07/2017-08-07-PowerDesigner16.5 自定义默认值去除引号/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-08-01-初识UML(1)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/01/2017-08-01-初识UML(1)/">初识UML(1)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/08/01/2017-08-01-初识UML(1)/" class="archive-article-date">
+  	<time datetime="2017-07-31T18:42:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>UML概述:统一建模语言,是一套符号规定,用于帮助描述思想和方法,帮助我们分析和设计,帮助思考和记录思路的结果.描述建模的概念,类/对象/关联/行为/接口/用力/包/顺序/协作/状态/指责.简单来说解决编码前的设计问题 </p>
+<p>UML特点: </p>
+<ul>
+<li>基于面向对象的可视化建模语言,采用本身定义的图形符号作为建模语言,通过建立图形之间的各种关系来描述模型关系. </li>
+<li>通用型 </li>
+<li>可视性 </li>
+<li>分析设计专用
+        
+          <a class="article-more-a" href="/2017/08/01/2017-08-01-初识UML(1)/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/01/2017-08-01-初识UML(1)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017-07-31-8086汇编-图示HANOI的移动过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/">8086汇编-图示HANOI的移动过程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/" class="archive-article-date">
+  	<time datetime="2017-07-31T02:38:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>DATAS SEGMENT<br>    ZHUZI_A DW 0,100 dup(?);表示当前柱子上有哪几个盘<br>    ZHUZI_B DW 0,100 dup(?);表示当前柱子上有哪几个盘<br>    ZHUZI_C DW 0,100 dup(?);表示当前柱子上有哪几个盘<br>    tip     db ‘input n:’,0ah,0dh,’$’ ;提示<br>    n   db  0 ;多少重</p>
+        
+          <a class="article-more-a" href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">汇编</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
 
 
@@ -320,6 +1008,34 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">影评</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">汇编</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">powerdesigner</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">对象</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">class</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">jdk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">javafx</a>
               </li>
             
             <div class="clearfix"></div>
