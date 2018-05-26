@@ -832,29 +832,35 @@
 
 
   
-    <article id="post-2017-07-31-8086汇编-图示HANOI的移动过程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-07-31-初识Lucene(1)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/">8086汇编-图示HANOI的移动过程</a>
+      <a class="article-title" href="/2017/07/31/2017-07-31-初识Lucene(1)/">初识Lucene(1)</a>
     </h1>
   
 
         
-        <a href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/" class="archive-article-date">
-  	<time datetime="2017-07-31T02:38:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-31</time>
+        <a href="/2017/07/31/2017-07-31-初识Lucene(1)/" class="archive-article-date">
+  	<time datetime="2017-07-31T03:08:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>DATAS SEGMENT<br>    ZHUZI_A DW 0,100 dup(?);表示当前柱子上有哪几个盘<br>    ZHUZI_B DW 0,100 dup(?);表示当前柱子上有哪几个盘<br>    ZHUZI_C DW 0,100 dup(?);表示当前柱子上有哪几个盘<br>    tip     db ‘input n:’,0ah,0dh,’$’ ;提示<br>    n   db  0 ;多少重</p>
+        <p>索引和搜索流程创建 索引过程： </p>
+<ul>
+<li>确定原始文档 </li>
+<li>获得文档（IO流） </li>
+<li>构建文档对象（POJO） </li>
+<li>分析文档，分词 </li>
+<li>创建索引索引库由索引和文档对象组成搜索过程：<br>用户通过搜索接口输入关键字<br>创建查询<br>执行搜索<br>从索引库搜索<br>渲染搜索结果，即返回页面或者json 创建文档对象：文档ID是文档的唯一编号，ID从0开始，自动加一。<br>索引前需要将原始内容创建成文档，文档中包含中域，域
         
-          <a class="article-more-a" href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/#more">more >></a>
+          <a class="article-more-a" href="/2017/07/31/2017-07-31-初识Lucene(1)/#more">more >></a>
         
       
 
@@ -868,7 +874,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">汇编</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">lucene</a>
         		</li>
       		
 		</ul>
@@ -878,7 +884,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/07/31/2017-07-31-初识Lucene(1)/">展开全文 >></a>
         </p>
       
 
@@ -908,6 +914,10 @@
 
 
   
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 
@@ -1030,6 +1040,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">javafx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">lucene</a>
               </li>
             
             <div class="clearfix"></div>
