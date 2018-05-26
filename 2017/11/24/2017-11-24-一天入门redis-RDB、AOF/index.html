@@ -18,7 +18,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://othgjp7hs.bkt.clouddn.com/17-11-24/70315118.jpg">
 <meta property="og:image" content="http://othgjp7hs.bkt.clouddn.com/17-11-24/10809839.jpg">
-<meta property="og:updated_time" content="2018-04-03T14:35:36.584Z">
+<meta property="og:updated_time" content="2018-05-26T02:18:45.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一天入门redis-RDB、AOF">
 <meta name="twitter:description" content="RDB是什么？每隔一段时间将内存中的数据集快照写入硬盘中(二进制形式)。如果需要恢复，则在将其读到内存中。大概是怎么做的？redis会fork一个进程来持久化，先创建临时文件，等写入工作完成后，替换掉上次的快照文件(dump.rdb文件，位于src目录下)。该过程中redis不执行任何IO操作，以确保较好的性能。什么是Fork？拷贝当前的进程，保持变量、环境变量、程序计算器不变，但是作为远进程的子">
@@ -220,8 +220,6 @@
 <li>大量大读写情况下RDB也有更强大的可靠性</li>
 </ul>
 <h3 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h3><p>RDB只做紧急备份的话：只在从机上开启，而且间隔时间较长，15到20分钟才备份一次<br>在开启AOF情况下，会带来持续的IO以及覆盖文件的阻塞，这时可以增大最大值。在主从模式下，主机可以不开启aof，但是如果主从机同时宕机的话，不能只执行简单的修复，而是应该对比主从的log文件进行修复，再重启，消耗时间比较长。</p>
-<p>本文章由<a href="http://chenhaoxiang.cn/" target="_blank" rel="noopener">[谙忆]</a>编写， 所有权利保留。<br>欢迎转载，分享是进步的源泉。</p>
-<blockquote cite="陈浩翔"><br><p background-color="#D3D3D3">转载请注明出处：<a href="http://chenhaoxiang.cn" target="_blank" rel="noopener"><font color="green">http://chenhaoxiang.cn</font></a><br><br><br>本文源自<strong>【<a href="http://chenhaoxiang.cn" target="_blank">人生之旅_谙忆的博客</a>】</strong></p><br></blockquote>
 
       
 
@@ -326,18 +324,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/04/02/感谢你来玩我的游戏，感谢你来看我的电影，感谢游戏来到我的世界/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/12/13/2017-12-13-java网络编程应用-本地版通讯QQ模拟/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          感谢你来玩我的游戏，感谢你来看我的电影，感谢游戏来到我的世界
+          java网络编程应用-本地版通讯QQ模拟
         
       </div>
     </a>
   
   
-    <a href="/2017/11/23/2017-11-23-使用反射获取class并生成相应代码/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">使用反射获取class并生成相应代码</div>
+    <a href="/2017/11/24/2017-11-24-一天入门redis-安装连接、基本数据类型/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">一天入门redis-安装连接、基本数据类型</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -507,6 +505,46 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">lucene</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xml</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">hsqldb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">bootstrap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vmware</a>
               </li>
             
             <div class="clearfix"></div>
