@@ -1,0 +1,122 @@
+---
+layout: post
+title: "初识Lucene(2)"
+date: 2017-08-02 01:36:03 +0800
+comments: true
+categories:
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 
+---
+
+
+中文分析器IK分析器的执行过程:从reader字符流开始,创建一个基于reader的tokenizer分词器,经过三个tokenfilter生成tokerns. 
+其他分词器:StandardAnalyzer/CJKAnalyzer 
+SmartChineseAnalyzer 
+IK Analyze下载地址:https://code.google.com/archive/p/ik-analyzer/
+<!-- more -->
+----------
+
+_ _ _
+#### 中文分析器IK
+#####分析器的执行过程:
+从reader字符流开始,创建一个基于reader的tokenizer分词器,经过三个tokenfilter生成tokerns.
+其他分词器:StandardAnalyzer/CJKAnalyzer
+SmartChineseAnalyzer
+IK Analyze下载地址:https://code.google.com/archive/p/ik-analyzer/downloads
+IK Analyze对中文分词的效果不错,而且可以用停用词/扩展字典来扩展.
+```
+		Analyzer analyzer = new IKAnalyzer();
+
+		TokenStream tokenStream = analyzer.tokenStream("test",
+				"需要测试的数据");
+		CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+		OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+		tokenStream.reset();
+		while (tokenStream.incrementToken()) {
+			System.out.println("start->" + offsetAttribute.startOffset());
+			System.out.println(charTermAttribute);
+			System.out.println("end->" + offsetAttribute.endOffset());
+		}
+		tokenStream.close();
+```
+_ _ _
+###分析器的使用时机
+进行搜索时,当输入让关键字域文档域内容包含词进行皮对时需要用分析器对域内容进行分析生成词汇单元.
+先创建索引,将文档对象先放入索引库,然后对文档对象进行分词,再将分词term放入索引库.
+搜索使用的分词器要与索引的分析器一致.
+_ _ _
+###全删除
+```
+	Directory directory = FSDirectory.open(new File("索引库地址"));
+    		Analyzer analyzer = new StandardAnalyzer();// 官方推荐
+		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
+		IndexWriter indexWriter = new IndexWriter(directory, config);
+        		indexWriter.deleteAll();
+		indexWriter.close();
+```
+_ _ _
+###根据条件删除
+```
+	Directory directory = FSDirectory.open(new File("索引库地址"));
+    		Analyzer analyzer = new StandardAnalyzer();// 官方推荐
+		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
+		IndexWriter indexWriter = new IndexWriter(directory, config);
+        				Query query = new TermQuery(new Term("fileName","apache"));
+		indexWriter.deleteDocuments(query);
+		indexWriter.close();
+```
+_ _ _
+修改：
+```
+		Document doc = new Document();
+		doc.add(new TextField("file", "测试文件名",Store.YES));
+//		doc.add(new TextField("fileC", "测试文件内容",Store.YES));
+		indexWriter.updateDocument(new Term("fileName","lucene"), doc, new IKAnalyzer());
+		indexWriter.close();
+```
+_ _ _
+查询所有:
+```
+Query query = new MatchAllDocsQuery();
+TopDocs topDocs = indexSearcher.search(query, 10);
+ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+		for (ScoreDoc scoreDoc : scoreDocs) {}
+```
+_ _ _
+按照数值范围:
+```
+	Query query = NumericRangeQuery.newLongRange("fileSize", 47L, 200L, false, true);
+```
+_ _ _
+组合条件:
+```
+		BooleanQuery booleanQuery = new BooleanQuery();
+		Query query1 = new TermQuery(new Term("fileName","apache"));
+		Query query2 = new TermQuery(new Term("fileName","lucene"));
+		//  select * from user where id =1 or name = 'safdsa'
+		booleanQuery.add(query1, Occur.MUST);
+		booleanQuery.add(query2, Occur.SHOULD);
+```
+_ _ _
+组合查询条件:
+```
+		Query query1 = new TermQuery(new Term("fileName","apache"));
+		Query query2 = new TermQuery(new Term("fileName","lucene"));
+		//  select * from user where id =1 or name = 'safdsa'
+		booleanQuery.add(query1, Occur.MUST);
+		booleanQuery.add(query2, Occur.SHOULD);
+```
+_ _ _
+条件解释的对象查询:
+```
+		QueryParser queryParser = new QueryParser("fileName",new IKAnalyzer());
+		Query query = queryParser.parse("fileName:lucene is apache OR fileContent:lucene is apache");
+```
+_ _ _
+多个默认域:
+```
+		String[] fields = {"fileName","fileContent"};
+		MultiFieldQueryParser queryParser = new MultiFieldQueryParser(fields,new IKAnalyzer());
+		Query query = queryParser.parse("lucene is apache");
+```

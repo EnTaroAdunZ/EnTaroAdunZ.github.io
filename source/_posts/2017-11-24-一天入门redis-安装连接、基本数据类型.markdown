@@ -1,0 +1,657 @@
+---
+layout: post
+title: "一天入门redis-安装连接、基本数据类型"
+date: 2017-11-24 09:43:27 +0800
+comments: true
+categories:
+tags: [vmware]
+keyword: 陈浩翔, 谙忆
+description:
+---
+
+
+系统环境
+VMware® Workstation 12 Pro
+x86_64/CentOS-7-x86_64-DVD-1708.iso
+XShell5
+redis-4.02
+下载地址http://redis.io/ 
+http://www.redis.cn/帮助文档Http://redisdoc.com/linux下安装
+先安装gcc yum install gcc-c++
+这里选择手动解压安装
+将
+<!-- more -->
+----------
+
+### 系统环境
+- VMware® Workstation 12 Pro
+- x86_64/CentOS-7-x86_64-DVD-1708.iso
+- XShell5
+- redis-4.02
+
+### 下载地址
+http://redis.io/
+http://www.redis.cn/
+
+### 帮助文档
+Http://redisdoc.com/
+
+### linux下安装
+- 先安装gcc yum install gcc-c++
+- 这里选择手动解压安装
+- 将压缩包上传至某目录或者wget，解压到/opt/
+- 进入该目录，使用make编译安装
+- 进入src目录下，cp redis.conf  /自定义配置文件目录
+- 至此安装成功
+![](http://othgjp7hs.bkt.clouddn.com/17-11-18/94647410.jpg)
+出现问题jemalloc/jemalloc.h，make distclean之后在make
+
+### 安装目录大致介绍-src下(可执行)
+![](http://othgjp7hs.bkt.clouddn.com/17-11-18/11134651.jpg)
+redis-sentinel:集群使用
+Redis-benchmark：性能测试
+Redis-check-aof：修复aof
+Redis-check-dump：操作入口
+Redis-server：刚才用到的启动命令
+
+### 启动redis并且连接到redis
+- 进入目录下的src
+- 启动：安装成功后入输入./redis-server /自定义配置文件目录
+- 连接：./redis-cli -p 6379(指定关端口)
+
+### 查看redis 是否启动成功
+![](http://othgjp7hs.bkt.clouddn.com/17-11-18/62264406.jpg)
+ps -ef|grep redis
+
+### 关闭redis
+- 在cli下的话，输入shutdown，并且exit
+- 不在cli下，单例客户端 ./redis-cli shutdown
+- 不在cli下，指定端口 redis-cli -p 6379 shutdown
+
+
+###  key基本操作(以String为例)
+![](http://othgjp7hs.bkt.clouddn.com/17-11-19/88373699.jpg)
+
+**ttl中-2表示已经过期，-1永不过期**
+
+**默认选中的数据为0号数据库，也就是说要move的话必须move到0之外的数据库， 默认有16个数据库**
+
+### 五大数据类型
+##### String
+- 一个key对应一个value
+- string类型是二进制安全的。
+- string类型是Redis最基本的数据类型。
+###### 指令操作
+![](http://othgjp7hs.bkt.clouddn.com/17-11-19/42664543.jpg)
+![](http://othgjp7hs.bkt.clouddn.com/17-11-19/96191901.jpg)
+
+##### Hash
+- 键值对集合
+- 适合用于存储对象
+- 类似Java里面的MapM<String,Map<String,Object>>这种情况
+###### 指令操作
+```
+127.0.0.1:6379[1]> hset h1 k1 v1
+(integer) 1
+127.0.0.1:6379[1]> hset h2 k1 v1
+(integer) 1
+127.0.0.1:6379[1]> hset h1 k1 v1
+(integer) 0
+127.0.0.1:6379[1]> hset h1 1 v1
+(integer) 1
+127.0.0.1:6379[1]> hget h1 k1
+"v1"
+127.0.0.1:6379[1]> hget 1 k1
+(nil)
+127.0.0.1:6379[1]> hget k1 1
+(nil)
+127.0.0.1:6379[1]> keys *
+1) "h1"
+2) "h2"
+127.0.0.1:6379[1]> hget h1 1
+"v1"
+127.0.0.1:6379[1]> hget h1 k1
+"v1"
+127.0.0.1:6379[1]> hget h1 k2
+(nil)
+127.0.0.1:6379[1]> hmset h3 k1 v1 k2 v2 k3 v3
+OK
+127.0.0.1:6379[1]> hgetall h3
+1) "k1"
+2) "v1"
+3) "k2"
+4) "v2"
+5) "k3"
+6) "v3"
+127.0.0.1:6379[1]> hdel h3 k3
+(integer) 1
+127.0.0.1:6379[1]> hgetall h3
+1) "k1"
+2) "v1"
+3) "k2"
+4) "v2"
+127.0.0.1:6379[1]> hlen h3
+(integer) 2
+127.0.0.1:6379[1]> HEXISTS h3 k2
+(integer) 1
+127.0.0.1:6379[1]> HEXISTS h3 k3
+(integer) 0
+127.0.0.1:6379[1]> HKEYS h3
+1) "k1"
+2) "k2"
+127.0.0.1:6379[1]> HVALS h3
+1) "v1"
+2) "v2"
+127.0.0.1:6379[1]> HINCRBY h3
+(error) ERR wrong number of arguments for 'hincrby' command
+127.0.0.1:6379[1]> HMGET h4 k1 1 k2 2
+1) (nil)
+2) (nil)
+3) (nil)
+4) (nil)
+127.0.0.1:6379[1]> hmset h4 k1 1 k2 2
+OK
+127.0.0.1:6379[1]> HGET h4
+(error) ERR wrong number of arguments for 'hget' command
+127.0.0.1:6379[1]> HGETALL h4
+1) "k1"
+2) "1"
+3) "k2"
+4) "2"
+127.0.0.1:6379[1]> HINCRBY h4 k1 1
+(integer) 2
+127.0.0.1:6379[1]> HGETALL h4
+1) "k1"
+2) "2"
+3) "k2"
+4) "2"
+127.0.0.1:6379[1]> HINCRBY h4 k1 1.52
+(error) ERR value is not an integer or out of range
+127.0.0.1:6379[1]> hset h4 k3 1.5
+(integer) 1
+127.0.0.1:6379[1]> HGETALL h4
+1) "k1"
+2) "2"
+3) "k2"
+4) "2"
+5) "k3"
+6) "1.5"
+127.0.0.1:6379[1]> hset h4 k3 1.5
+(integer) 0
+127.0.0.1:6379[1]> HGETALL h4
+1) "k1"
+2) "2"
+3) "k2"
+4) "2"
+5) "k3"
+6) "1.5"
+127.0.0.1:6379[1]> HINCRBYFLOAT h4 k3 1.5
+"3"
+127.0.0.1:6379[1]> HGETALL h4
+1) "k1"
+2) "2"
+3) "k2"
+4) "2"
+5) "k3"
+6) "3"
+127.0.0.1:6379[1]> HSETNX h5 k1 v1 k2 v2
+(error) ERR wrong number of arguments for 'hsetnx' command
+127.0.0.1:6379[1]> HSETNX h5 k1 v1
+(integer) 1
+127.0.0.1:6379[1]> HGETALL h5
+1) "k1"
+2) "v1"
+127.0.0.1:6379[1]> 
+[root@localhost src]# 
+
+```
+
+
+##### List
+
+###### 类似于数据结构中的双端链表
+
+```
+127.0.0.1:6379> FLUSHALL
+OK
+127.0.0.1:6379> lpush k1 v1 v2 v3
+(integer) 3
+127.0.0.1:6379> llen k1
+(integer) 3
+127.0.0.1:6379> lrange k1 0 -1
+1) "v3"
+2) "v2"
+3) "v1"
+127.0.0.1:6379> rpush k1 v4 v5
+(integer) 5
+127.0.0.1:6379> lrange k1 0 -1
+1) "v3"
+2) "v2"
+3) "v1"
+4) "v4"
+5) "v5"
+127.0.0.1:6379> lpop k1
+"v3"
+127.0.0.1:6379> lpop k1
+"v2"
+127.0.0.1:6379> rpop k1
+"v5"
+127.0.0.1:6379> lindex k1 0
+"v1"
+127.0.0.1:6379> lindex k1 4
+(nil)
+127.0.0.1:6379> lindex k1 2
+(nil)
+127.0.0.1:6379> lindex k1 1
+"v4"
+127.0.0.1:6379> rpop v6
+(nil)
+127.0.0.1:6379> rpush k1 v6
+(integer) 3
+127.0.0.1:6379> lrem k1 1 v6
+(integer) 1
+127.0.0.1:6379> rpush k1 v6 v6 v6 v6
+(integer) 6
+127.0.0.1:6379> LRANGE k1 0 -1
+1) "v1"
+2) "v4"
+3) "v6"
+4) "v6"
+5) "v6"
+6) "v6"
+127.0.0.1:6379> lrem k1 
+(error) ERR wrong number of arguments for 'lrem' command
+127.0.0.1:6379> lrem k1 3 v6
+(integer) 3
+127.0.0.1:6379> LRANGE k1 0 -1
+1) "v1"
+2) "v4"
+3) "v6"
+127.0.0.1:6379> ltrim k1 -1 1
+OK
+127.0.0.1:6379> LRANGE k1 0 -1
+(empty list or set)
+127.0.0.1:6379> rpush k1 v1 v2 v3 v4 v5 v6
+(integer) 6
+127.0.0.1:6379> LRANGE k1 0 3
+1) "v1"
+2) "v2"
+3) "v3"
+4) "v4"
+127.0.0.1:6379> RPOPLPUSH k1 k2
+"v6"
+127.0.0.1:6379> LRANGE k1 0 -1
+1) "v1"
+2) "v2"
+3) "v3"
+4) "v4"
+5) "v5"
+127.0.0.1:6379> LRANGE k2 0 -1
+1) "v6"
+127.0.0.1:6379> LSET k1 0 v5
+OK
+127.0.0.1:6379> LRANGE k2 0 -1
+1) "v6"
+127.0.0.1:6379> LRANGE k1 0 -1
+1) "v5"
+2) "v2"
+3) "v3"
+4) "v4"
+5) "v5"
+127.0.0.1:6379> LINSERT k1 BEFORE 2 i1
+(integer) -1
+127.0.0.1:6379> LRANGE k1 0 -1
+1) "v5"
+2) "v2"
+3) "v3"
+4) "v4"
+5) "v5"
+127.0.0.1:6379> LINSERT k1 BEFORE k5 i1
+(integer) -1
+127.0.0.1:6379> LINSERT k1 BEFORE v5 i1
+(integer) 6
+127.0.0.1:6379> LRANGE k1 0 -1
+1) "i1"
+2) "v5"
+3) "v2"
+4) "v3"
+5) "v4"
+6) "v5"
+127.0.0.1:6379> LINSERT k1 AFTER v5 i2
+(integer) 7
+127.0.0.1:6379> LRANGE k1 0 -1
+1) "i1"
+2) "v5"
+3) "i2"
+4) "v2"
+5) "v3"
+6) "v4"
+7) "v5"
+127.0.0.1:6379> 
+
+```
+
+##### Set
+###### 与java中的set相似，value不能相同
+```
+127.0.0.1:6379> FLUSHDB
+OK
+127.0.0.1:6379> sadd set1 v1 v2
+(integer) 2
+127.0.0.1:6379> sadd set2 v1 v1
+(integer) 1
+127.0.0.1:6379> SMEMBERS k1
+(empty list or set)
+127.0.0.1:6379> SMEMBERS set1
+1) "v1"
+2) "v2"
+127.0.0.1:6379> clear
+127.0.0.1:6379> FLUSHDB
+OK
+127.0.0.1:6379> sadd k1 m1 m2 m3
+(integer) 3
+127.0.0.1:6379> SMEMBERS k1
+1) "m2"
+2) "m3"
+3) "m1"
+127.0.0.1:6379> sadd k1 m4 m4 m4
+(integer) 1
+127.0.0.1:6379> SMEMBERS k1
+1) "m3"
+2) "m4"
+3) "m1"
+4) "m2"
+127.0.0.1:6379> SISMEMBER k1 m4
+(integer) 1
+127.0.0.1:6379> SMEMBERS k1
+1) "m4"
+2) "m1"
+3) "m2"
+4) "m3"
+127.0.0.1:6379> 
+[root@localhost src]# 
+[root@localhost src]# ./redis-cli -p 6379
+127.0.0.1:6379> SISMEMBER k1 m5
+(integer) 0
+127.0.0.1:6379> scard k1
+(integer) 4
+127.0.0.1:6379> srem k1 v4
+(integer) 0
+127.0.0.1:6379> srem k1 m4
+(integer) 1
+127.0.0.1:6379> SRANDMEMBER k1 1
+1) "m3"
+127.0.0.1:6379> SRANDMEMBER k1 4
+1) "m2"
+2) "m3"
+3) "m1"
+127.0.0.1:6379> SRANDMEMBER k1 3
+1) "m2"
+2) "m3"
+3) "m1"
+127.0.0.1:6379> SPOP ky 2
+(empty list or set)
+127.0.0.1:6379> 
+127.0.0.1:6379> SPOP k1 2
+1) "m1"
+2) "m2"
+127.0.0.1:6379> SMEMBERS k1
+1) "m3"
+127.0.0.1:6379> FLUSHALL
+OK
+127.0.0.1:6379> sadd k1 v1 v2 v3
+(integer) 3
+127.0.0.1:6379> sadd k2 v3 v4 v5
+(integer) 3
+127.0.0.1:6379> SDIFF k1 k2
+1) "v1"
+2) "v2"
+127.0.0.1:6379> SINTER k1 k2
+1) "v3"
+127.0.0.1:6379> SUBSCRIBE k1 k2
+Reading messages... (press Ctrl-C to quit)
+1) "subscribe"
+2) "k1"
+3) (integer) 1
+1) "subscribe"
+2) "k2"
+3) (integer) 2
+
+```
+##### hashset
+###### 与set类似
+
+```
+127.0.0.1:6379> FLUSHALL
+OK
+127.0.0.1:6379> hset k1 f1 v1 f2 v2
+(integer) 2
+127.0.0.1:6379> hget k1 v1
+(nil)
+127.0.0.1:6379> hget k1 f1
+"v1"
+127.0.0.1:6379> hget k1 f2
+"v2"
+127.0.0.1:6379> hmset k1 f3 v3 f4 v4
+OK
+127.0.0.1:6379> hmget k1 f1 f2 f3 f4
+1) "v1"
+2) "v2"
+3) "v3"
+4) "v4"
+127.0.0.1:6379> hmget k1 f4 v3
+1) "v4"
+2) (nil)
+127.0.0.1:6379> hmget k1 f4 f3
+1) "v4"
+2) "v3"
+127.0.0.1:6379> HGETALL
+(error) ERR wrong number of arguments for 'hgetall' command
+127.0.0.1:6379> HGETALL k1
+1) "f1"
+2) "v1"
+3) "f2"
+4) "v2"
+5) "f3"
+6) "v3"
+7) "f4"
+8) "v4"
+127.0.0.1:6379> hdel k1 f1
+(integer) 1
+127.0.0.1:6379> hdel k1 f2
+(integer) 1
+127.0.0.1:6379> HGETALL k1
+1) "f3"
+2) "v3"
+3) "f4"
+4) "v4"
+127.0.0.1:6379> 
+127.0.0.1:6379> HLEN k1
+(integer) 2
+127.0.0.1:6379> HEXISTS k1 f1
+(integer) 0
+127.0.0.1:6379> HEXISTS k1 f3
+(integer) 1
+127.0.0.1:6379> hlen k1
+(integer) 2
+127.0.0.1:6379> HEXISTS k1 v1
+(integer) 0
+127.0.0.1:6379> hkeys k1
+1) "f3"
+2) "f4"
+127.0.0.1:6379> HVALS v1
+(empty list or set)
+127.0.0.1:6379> HVALS k1
+1) "v3"
+2) "v4"
+127.0.0.1:6379> hset k2 f1 1 f2 1.5
+(integer) 2
+127.0.0.1:6379> HINCRBY k2 f1 1
+(integer) 2
+127.0.0.1:6379> HINCRBYFLOAT k2 f2 1.3
+"2.8"
+127.0.0.1:6379> HGET k2 f2
+"2.8"
+127.0.0.1:6379> HGETALL k2
+1) "f1"
+2) "2"
+3) "f2"
+4) "2.8"
+127.0.0.1:6379> HSETNX k2 f1 3
+(integer) 0
+127.0.0.1:6379> HSETNX k2 f3 3
+(integer) 1
+127.0.0.1:6379> HGETALL k2
+1) "f1"
+2) "2"
+3) "f2"
+4) "2.8"
+5) "f3"
+6) "3"
+127.0.0.1:6379> 
+
+```
+
+
+##### Zset(有序集合set)
+
+```
+127.0.0.1:6379> zadd k1 1 v1 2 v2 3 v34
+(integer) 3
+127.0.0.1:6379> zadd k1 2 v3
+(integer) 1
+127.0.0.1:6379> ZRANGE k1 0 -1 withscores
+1) "v1"
+2) "1"
+3) "v2"
+4) "2"
+5) "v3"
+6) "2"
+7) "v34"
+8) "3"
+127.0.0.1:6379> zadd k1 2 v34
+(integer) 0
+127.0.0.1:6379> ZRANGE k1 1 3
+1) "v2"
+2) "v3"
+3) "v34"
+127.0.0.1:6379> ZRANGE k1 0 4
+1) "v1"
+2) "v2"
+3) "v3"
+4) "v34"
+127.0.0.1:6379> ZRANGE k1 0 3
+1) "v1"
+2) "v2"
+3) "v3"
+4) "v34"
+127.0.0.1:6379> ZRANGE k1 0 3 withscores
+1) "v1"
+2) "1"
+3) "v2"
+4) "2"
+5) "v3"
+6) "2"
+7) "v34"
+8) "2"
+127.0.0.1:6379> ZRANGE k1 (1 3 withscores
+(error) ERR value is not an integer or out of range
+127.0.0.1:6379> ZRANGEBYSCORE k1 1 3
+1) "v1"
+2) "v2"
+3) "v3"
+4) "v34"
+127.0.0.1:6379> ZRANGEBYSCORE k1 (1 3
+1) "v2"
+2) "v3"
+3) "v34"
+127.0.0.1:6379> ZRANGEBYSCORE k1 (1 (3
+1) "v2"
+2) "v3"
+3) "v34"
+127.0.0.1:6379> ZRANGEBYSCORE k1 (1 (2
+(empty list or set)
+127.0.0.1:6379> ZRANGEBYSCORE k1 1 (2
+1) "v1"
+127.0.0.1:6379> ZRANGEBYLEX 1 +inf withscores
+(error) ERR min or max not valid string range item
+127.0.0.1:6379> zrangebyscore  1 +inf withscores
+(error) ERR min or max is not a float
+127.0.0.1:6379> ZRANGEBYSCORE k1 1 +inf withscores
+1) "v1"
+2) "1"
+3) "v2"
+4) "2"
+5) "v3"
+6) "2"
+7) "v34"
+8) "2"
+127.0.0.1:6379> ZRANGEBYSCORE k1 1 +inf withscores limit 1 2
+1) "v2"
+2) "2"
+3) "v3"
+4) "2"
+127.0.0.1:6379> 
+127.0.0.1:6379> zrem k1 v34
+(integer) 1
+127.0.0.1:6379> ZRANGE k1 0 -1
+1) "v1"
+2) "v2"
+3) "v3"
+127.0.0.1:6379> zcard k1
+(integer) 3
+127.0.0.1:6379> zcount k1 2 3
+(integer) 2
+127.0.0.1:6379> zcount k1 1 3
+(integer) 3
+127.0.0.1:6379> ZRANGE k1 v1
+(error) ERR wrong number of arguments for 'zrange' command
+127.0.0.1:6379> ZRAnk k1 v1
+(integer) 0
+127.0.0.1:6379> ZRAnk k1 v2
+(integer) 1
+127.0.0.1:6379> ZSCORE K1 V1
+(nil)
+127.0.0.1:6379> ZSCORE K1 v2
+(nil)
+127.0.0.1:6379> ZSCORE K1 v1
+(nil)
+127.0.0.1:6379> ZSCORE k1 v1
+"1"
+127.0.0.1:6379> ZREVRANK k1 v1
+(integer) 2
+127.0.0.1:6379> ZREVRANK k1 v2
+(integer) 1
+127.0.0.1:6379> ZREVRANK k1 v3
+(integer) 0
+127.0.0.1:6379> ZREVRANGE k1 0 -1 withscores
+1) "v3"
+2) "2"
+3) "v2"
+4) "2"
+5) "v1"
+6) "1"
+127.0.0.1:6379> ZREVRANGEBYSCORE k1 1 3 withscores
+(empty list or set)
+127.0.0.1:6379> ZRANGEBYSCORE k1 1 2 withscores
+1) "v1"
+2) "1"
+3) "v2"
+4) "2"
+5) "v3"
+6) "2"
+127.0.0.1:6379> ZREVRANGEBYLEX k1 1 3 withscores
+(error) ERR min or max not valid string range item
+127.0.0.1:6379> ZREVRANGEBYLEX k1 1 3 
+(error) ERR min or max not valid string range item
+127.0.0.1:6379> ZREVRANGEBYLEX k1 3 1 withscores
+(error) ERR min or max not valid string range item
+127.0.0.1:6379> ZREVRANGEBYscore k1 3 1 withscores
+1) "v3"
+2) "2"
+3) "v2"
+4) "2"
+5) "v1"
+6) "1"
+127.0.0.1:6379> 
+```

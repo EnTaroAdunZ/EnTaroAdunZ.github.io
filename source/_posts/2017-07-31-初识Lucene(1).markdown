@@ -1,0 +1,134 @@
+---
+layout: post
+title: "初识Lucene(1)"
+date: 2017-07-31 11:08:10 +0800
+comments: true
+categories:
+tags: [lucene]
+keyword: 陈浩翔, 谙忆
+description: 
+---
+
+
+索引和搜索流程创建 索引过程： 
+- 确定原始文档 
+- 获得文档（IO流） 
+- 构建文档对象（POJO） 
+- 分析文档，分词 
+- 创建索引索引库由索引和文档对象组成搜索过程：
+用户通过搜索接口输入关键字
+创建查询
+执行搜索
+从索引库搜索
+渲染搜索结果，即返回页面或者json 创建文档对象：文档ID是文档的唯一编号，ID从0开始，自动加一。 
+索引前需要将原始内容创建成文档，文档中包含中域，域
+<!-- more -->
+----------
+
+_ _ _
+####索引和搜索流程
+创建 索引过程：
+- 确定原始文档
+- 获得文档（IO流）
+- 构建文档对象（POJO）
+- 分析文档，分词
+- 创建索引
+
+**索引库由索引和文档对象组成**
+
+####搜索过程：
+- 用户通过搜索接口输入关键字
+- 创建查询
+- 执行搜索
+- 从索引库搜索
+- 渲染搜索结果，即返回页面或者json
+_ _ _
+####创建文档对象：
+**文档ID是文档的唯一编号，ID从0开始，自动加一。**
+索引前需要将原始内容创建成文档，文档中包含中域，域中存储内容。
+每个文档可以有多个域，不同的文档可以有不同的域(域名或域值相同)，同一个文档可以有相同的域。
+域的属性:是否分析/是否索引/是否存储
+用不同域的子类可以实现我们不同的需求.
+StringField:字符串,不分析,存储整个串,决定是否存储
+LongField:Long,分析,索引,决定是否存储
+StoreField:多种类型,不分析,不索引,存储
+TextField:字符串,流分析,索引,决定是否存储
+_ _ _
+####分析文档
+英语中：在原始文档中提取单词，字母转化为小写，去除标点符号，去除停用词等过程生成最终的词汇单元。不同域中拆分出来相同的单词是不同的term，term中包含文档的域名以及单词。内容。即内容相同域不同的话term不同。不能在域中找在别的域中存在的内容，
+_ _ _
+####创建索引
+当不同种存在相同的索引时，会记录对应的文档对象，查询时会将相应的文档对象返回。注意返回文档对象的顺序根据索引数量而定。
+倒排索引结构、反向索引结构：创建索引是对语汇单元索引，通过词语找文档。索引即词汇表，规模较小，文档集合较大。
+_ _ _
+- Directory:索引库存放位置
+- Analyzer:分析器
+- indexReader:需要指定查询位置,也就是Directory,IO流
+- indexsearcher:指定indexReader,可以搜索
+- TermQuery:指定查询的域和查询的关键字
+创建索引代码:
+```
+		Directory directory = FSDirectory.open(new File("索引存放位置"));
+		//分析器 
+		Analyzer analyzer = new IKAnalyzer();
+		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
+		//将文档写入索引库，此过程进行索引创建
+		IndexWriter indexWriter = new IndexWriter(directory, config);
+		File f = new File("需要检索的文件夹");
+		File[] listFiles = f.listFiles();
+		for (File file : listFiles) {
+			Document document = new Document();
+			// 文件名称
+			String file_name = file.getName();
+			Field fileNameField = new TextField("fileName", file_name, Store.YES);
+			// 文件大小
+			long file_size = FileUtils.sizeOf(file);
+			Field fileSizeField = new LongField("fileSize", file_size, Store.YES);
+			// 文件路径
+			String file_path = file.getPath();
+			Field filePathField = new StoredField("filePath", file_path);
+			// 文件内容
+			String file_content = FileUtils.readFileToString(file);
+			Field fileContentField = new TextField("fileContent", file_content, Store.NO);
+			//往文档添加域
+			document.add(fileNameField);
+			document.add(fileSizeField);
+			document.add(filePathField);
+			document.add(fileContentField);
+			// 第四步：使用indexwriter对象将document对象写入索引库，此过程进行索引创建。并将索引和document对象写入索引库。
+			indexWriter.addDocument(document);
+
+		}
+		// 关闭IndexWriter。
+		indexWriter.close();
+```
+_ _ _
+查询索引代码:
+- Directory:索引库存放位置
+- indexReader:需要指定查询位置,也就是Directory,IO流
+- indexsearcher:指定indexReader,可以搜索
+- TermQuery:指定查询的域和查询的关键字
+- IndexSearcher有四种重载方法,可以添加过滤策略/排序策略/组合条件查询.
+```
+		Directory directory = FSDirectory.open(new File("索引库位置"));
+		IndexReader indexReader = DirectoryReader.open(directory);
+        //IndexSearcher是真正的搜索执行者
+		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+        //决定域和查询的关键字
+		Query query = new TermQuery(new Term("fileName", "lucene"));
+		//查询头部的哪几个文档
+        TopDocs topDocs = indexSearcher.search(query, 10);
+        //评分之后的文档
+		ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+		for (ScoreDoc scoreDoc : scoreDocs) {
+        	//拿到文档的ID
+			int doc = scoreDoc.doc;
+			Document document = indexSearcher.doc(doc);
+			String fileName = document.get("fileName");
+			String fileContent = document.get("fileContent");
+			String fileSize = document.get("fileSize");
+			String filePath = document.get("filePath");
+		}
+        //关闭
+		indexReader.close()
+```

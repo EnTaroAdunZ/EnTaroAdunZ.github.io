@@ -1,0 +1,290 @@
+---
+layout: post
+title: "秒杀模块碎碎念笔记(3)-WEB层"
+date: 2017-07-31 11:16:02 +0800
+comments: true
+categories:
+tags: []
+keyword: 陈浩翔, 谙忆
+description:
+---
+
+
+转发是服务器行为，重定向是客户端行为使用情景：两个页面有数据传递则转发，否则可以用重定向 
+重定向：发生了两次请求，信息不会丢失，浏览器地址发生了改变 
+转发：只有一次请求，信息不会丢失，浏览器地址没有发生改变，没有ｒｅｑｕｅｓｔ传递的概念 
+流程 
+重定向：　发送请求 –>服务器运行–>响应请求，返回给浏览器一个新的地址以及３０２响应码，浏览器响应，发送一个新的请求 
+转发：发送请求 –>服务器运
+<!-- more -->
+----------
+
+_ _ _
+###转发是服务器行为，重定向是客户端行为
+使用情景：两个页面有数据传递则转发，否则可以用重定向
+重定向：发生了两次请求，信息不会丢失，浏览器地址发生了改变
+转发：只有一次请求，信息不会丢失，浏览器地址没有发生改变，没有ｒｅｑｕｅｓｔ传递的概念
+流程
+重定向：　发送请求 -->服务器运行-->响应请求，返回给浏览器一个新的地址以及３０２响应码，浏览器响应，发送一个新的请求
+转发：发送请求 -->服务器运行-->进行请求的重新设置，例如通过request.setAttribute(name,value)-->根据转发的地址，获取该地址的网页-->响应请求给浏览器
+_ _ _
+###Restful接口:
+更加人性化的URL
+原来的URL:
+user/delete/{id}
+使用Restful之后的URL:
+user/{id}/delete
+
+Restful规范
+- GET 查询
+- POST 添加/修改
+- PUT 修改
+- DELETE 删除操作
+如果在方法头method没有对应上的话,则不会响应请求
+@PathVariable:参数绑定
+```
+   @RequestMapping(value = "/{seckillId}/detail",method = RequestMethod.GET)
+    public String detail(@PathVariable("seckillId") Long seckillId, Model model)
+    {
+        if (seckillId == null)
+        {
+        	//重定向
+            return "redirect:/seckill/list";
+        }
+        Seckill seckill=seckillService.getById(seckillId);
+        if (seckill==null)
+        {
+        	//转发
+            return "forward:/seckill/list";
+        }
+        model.addAttribute("seckill",seckill);
+        return "detail";
+    }
+```
+_ _ _
+###SpringMVC运行流程
+1. 用户发送HTTP请求,请求将有dispatcherServlet受理(其实是拦截所有请求,一般都这样写)
+2. 在DefaultAnnotationHandlerMapper去寻找映射的URL,寻找handler
+3. DefaultAnnotationHandlerAdapter进行寻找handler的适配
+4. 最终会找到我们自己写的controller
+5. DefaultAnnotationHandlerAdapter将返回一个ModelAndView给DispatcherServlet
+6. DispatcherServlet寻找视图解析器,InternalResourceViewResolver
+7. 然后将解析后的视图与model结合返回jsp给用户
+_ _ _
+###RequestiMapping支持三种方式URL:
+- 标准
+- Ant 风格
+- 带{XXX}占位符
+例子:
+/company/{companyID}/user/{userID}/detail
+_ _ _
+###返回JSON数据:
+produces 限制编码以及告诉浏览器这是一个json
+```
+  @RequestMapping(value = "/{seckillId}/{md5}/execution",
+            method = RequestMethod.POST,
+            produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
+                                                   @PathVariable("md5") String md5,
+                                                   @CookieValue(value = "userPhone",required = false) Long userPhone)
+    {
+    	return result;
+    }
+```
+传入ｃｏｏｋｉｅＶａｌｕｅ
+``  @CookieValue(value = "userPhone",required = false) Long userPhone``
+_ _ _
+整合顺序，mybatis整合到spring，springmvc与spring基本不需要整合
+所以在springmvc中配置文件
+```
+ <servlet>
+        <servlet-name>seckill-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!--
+            配置SpringMVC 需要配置的文件
+            spring-dao.xml，spring-service.xml,spring-web.xml
+            Mybites -> spring -> springMvc
+        -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/spring-*.xml</param-value>
+        </init-param>
+    </servlet>
+```
+_ _ _
+``<mvc:annotation-driven/>``
+作用:自动注册运行流程中两大组件,提供数据绑定,以及对xml,json的读写支持,包括数字与日期类型的转换
+``<mvc:default-servlet-handler/>``
+可以使用/做路径映射,并且支持静态资源的处理,后缀为静态资源格式的话,不会去找mapper
+不同配置文件配置扫描不同的包
+_ _ _
+
+_ _ _
+controller中建议直接返回string
+最好在controller包含一个log
+写在controller中的方法中的参数可能为null,所以如果要用到话要判断一下
+用cookice一定要用false
+_ _ _
+返回Json中的数据,使用泛型
+```
+public class SeckillResult<T> {
+
+    //请求是否成功
+    private boolean success;
+    private T data;
+    private String error;
+
+    public SeckillResult(boolean success, T data) {
+        this.success = success;
+        this.data = data;
+    }
+
+    public SeckillResult(boolean success, String error) {
+        this.success = success;
+        this.error = error;
+    }
+}
+```
+T在本项目中主要包装两种类型,一种是秒杀接口是否开放,一种是秒杀成功的信息.
+JQ声明要先于bookstrap
+_ _ _
+静态包含,jsp内容直接合并
+动态包含,先独立转换为servlet
+_ _ _
+时间进行格式:
+```
+<c:forEach items="${list}" var="sk">
+  <fmt:formatDate value="${sk.startTime}" pattern="yyyy-MM-dd HH:mm:ss" />
+ </c:forEach>
+```
+_ _ _
+
+一般要将几个常用的头部放在一起(根据jsp所需要的位置):
+
+```
+<%@include file="common/tag.jsp"%>
+...
+
+<%@include file="common/head.jsp" %>
+```
+
+tag.jsp:
+```
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+```
+
+head.jsp:
+```
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- 可选的Bootstrap主题文件（一般不使用） -->
+<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap-theme.min.css" rel="stylesheet">
+
+<!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+<!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+```
+_ _ _
+js要做到模块化
+js文件也要引入
+```
+一个对象里面有很多对象,这些对象相当于方法
+var some={
+	封装URL
+	URL:{}
+    detail:{
+    	init:function(params){
+            	            var startTime = params['startTime'];
+            var endTime = params['endTime'];
+            var seckillId = params['seckillId'];
+        }
+    }
+}
+$(function{
+	some.detail.init({
+              seckillId:${seckill.seckillId},
+            startTime:${seckill.startTime.time},//毫秒
+            endTime:${seckill.endTime.time}
+
+    });
+});
+```
+_ _ _
+bookstrap的model不一般,可以用js进行调用,如:
+```
+         //绑定手机 控制输出
+                var killPhoneModal = $('#killPhoneModal');
+                killPhoneModal.modal({
+                    show: true,//显示弹出层
+                    backdrop: 'static',//禁止位置关闭
+                    keyboard: false//关闭键盘事件
+                });
+
+```
+_ _ _
+```
+   $.cookie('userPhone', inputPhone, {expires: 7, path: '/seckill'});
+```
+尽量缩小cookie的范围
+七天有效期,生效路径,路径越少,越节省流量
+_ _ _
+写一个带动画的span错误:
+```
+$('#killPhoneMessage').hide().html('<label class="label label-danger">手机号错误!</label>').show(300);
+```
+_ _ _
+模拟界面登录（不登录不能进行秒杀）
+先在cookie中寻找手机号,然后进行验证(是否符合格式,是否为空)
+如果没有通过的话,弹出一个窗口强行让用户输入,输入后并提交后,先检查是否符合格式,如果符合格式,则登录进去,如果不符合则提示信息.
+如果通过的话直接进去界面
+_ _ _
+提取ＵＲＬ
+写在some．ＵＲＬ中，方便维护，而不用到代码中去找ＵＲＬ
+写法，其实对象里面是一个方法，所以some.URL.now
+_ _ _
+使用Jquery的倒计时:
+```
+    <h2 class="text-danger">
+                <%--显示time图标--%>
+                <span class="glyphicon glyphicon-time"></span>
+                <%--展示倒计时--%>
+                <span class="glyphicon" id="seckill-box"></span>
+    </h2>
+```
+JS代码:
+//放入的是开始时间
+```
+var seckillBox = $('#seckill-box');
+var killTime = new Date(startTime + 1000);//todo 防止时间偏移
+ seckillBox.countdown(killTime, function (event) {
+                //时间格式
+                var format = event.strftime('秒杀倒计时: %D天 %H时 %M分 %S秒 ');
+                seckillBox.html(format);
+            }).on('finish.countdown', function () {
+                //时间完成后回调事件
+                //获取秒杀地址,控制现实逻辑,执行秒杀
+                console.log('______fininsh.countdown');
+                seckill.handlerSeckill(seckillId, seckillBox);
+            });
+```
+_ _ _
+发送post请求
+```
+ $.post(killUrl, {}, function (result) {}
+ ( url, [data], [callback], [type] )
+ data (Map) : (可选) 要发送给服务器的数据，以 Key/value 的键值对形式表示。
+ type (String) : (可选)官方的说明是：Type of data to be sent。其实应该为客户端请求的类型(JSON,XML,等等)
+```
+_ _ _
+one绑定一次,click一直绑定
+
+

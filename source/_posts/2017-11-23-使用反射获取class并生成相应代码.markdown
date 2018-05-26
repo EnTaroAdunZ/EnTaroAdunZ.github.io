@@ -1,0 +1,196 @@
+---
+layout: post
+title: "使用反射获取class并生成相应代码"
+date: 2017-11-23 10:32:22 +0800
+comments: true
+categories:
+tags: [class]
+keyword: 陈浩翔, 谙忆
+description: package practice1;public class Person{
+    private String name;
+    private String sex;
+    private Integer age;
+    private String idNo;
+    private Boolean isMerried;
+    public String getName() { 
+---
+
+
+package practice1;public class Person{
+    private String name;
+    private String sex;
+    private Integer age;
+    private String idNo;
+    private Boolean isMerried;
+    public String getName() {
+<!-- more -->
+----------
+
+
+```
+package practice1;
+
+public class Person{
+	private String name;
+	private String sex;
+	private Integer age;
+	private String idNo;
+	private Boolean isMerried;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name){
+		this.name = name;
+	}
+	public String getSex() {
+		return sex;
+	}
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+	public Integer getAge() {
+		return age;
+	}
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+	public String getIdNo() {
+		return idNo;
+	}
+	public void setIdNo(String idNo) {
+		this.idNo = idNo;
+	}
+	public Boolean getIsMerried() {
+		return isMerried;
+	}
+	public void setIsMerried(Boolean isMerried) {
+		this.isMerried = isMerried;
+	}
+	public Person(String idNo) {
+	}
+	public Person() {
+	}
+}
+
+```
+
+```
+
+package practice1;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
+
+
+
+
+/**
+ * 
+ * @author 63574
+ * 已知问题
+ * 1、无法还原注解、注释,方法体内内容
+ * 2、访问级别不完善
+ * 3、没有还原带泛型的部分
+ * 4、没有还原包
+ */
+public class GenerateJava {
+	public static String PersonNmae="practice1.Person"; 
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+
+		 System.out.println(ClassToJava(PersonNmae));
+	}
+	
+	
+	public static String ClassToJava(String ClassNmae) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		 Class clazz=Class.forName(ClassNmae) ;
+		 
+		 StringBuilder javaContext=new StringBuilder();
+		 javaContext.append("public class "+clazz.getSimpleName()+" {\n");
+		 
+		 
+		 Field[] fields = clazz.getDeclaredFields();
+		 for(Field field:fields) {
+			 field.setAccessible(true);
+			
+			 javaContext.append(GetModifiers( field.getModifiers())+" "+field.getType().getSimpleName()+" "+field.getName()+";\n");
+		 }
+
+		 Method[] methods = clazz.getDeclaredMethods();
+		 for(Method method:methods) {
+			 method.setAccessible(true);
+			 javaContext.append(GetModifiers( method.getModifiers())+" "+method.getReturnType().getSimpleName()+" "+method.getName()+"(");
+
+			 Class<?>[] parameterTypes = method.getParameterTypes();
+			 Parameter[] parameters = method.getParameters();
+			 for(int i=0;i<parameterTypes.length;i++) {
+				 String simpleName = parameterTypes[i].getSimpleName();
+				 //要获取正确参数名需要打开javac -parameters
+				 javaContext.append(simpleName+" "+parameters[i].getName());
+			 }
+			 javaContext.append(") ");
+			 Class<?>[] exceptionTypes = method.getExceptionTypes();
+			 
+			 if(exceptionTypes.length>=1) {
+				 javaContext.append("throws ");
+			 }
+			 for(int i=0;i<exceptionTypes.length;i++) {
+				 if(i!=0&&i!=exceptionTypes.length-1) {
+					 javaContext.append(",");
+				 }
+				 
+				 javaContext.append(exceptionTypes[i].getSimpleName());
+			 }
+			 javaContext.append(" {}\n");
+		 }
+		 
+		 Constructor[] constructors = clazz.getConstructors();
+		 
+		 for(Constructor constructor:constructors) {
+			 constructor.setAccessible(true);
+			 javaContext.append(GetModifiers( constructor.getModifiers())+" "+constructor.getDeclaringClass().getSimpleName()+"(");
+
+			 Class<?>[] parameterTypes = constructor.getParameterTypes();
+			 Parameter[] parameters = constructor.getParameters();
+			 
+			 for(int i=0;i<parameterTypes.length;i++) {
+				 String simpleName = parameterTypes[i].getSimpleName();
+				 //要获取正确参数名需要打开javac -parameters
+				 javaContext.append(simpleName+" "+parameters[i].getName());
+			 }
+			 javaContext.append(") ");
+			 Class<?>[] exceptionTypes = constructor.getExceptionTypes();
+			 
+			 if(exceptionTypes.length>=1) {
+				 javaContext.append("throws ");
+			 }
+			 for(int i=0;i<exceptionTypes.length;i++) {
+				 if(i!=0&&i!=exceptionTypes.length-1) {
+					 javaContext.append(",");
+				 }
+				 
+				 javaContext.append(exceptionTypes[i].getSimpleName());
+			 }
+			 javaContext.append(" {}\n");
+		 }
+		 
+		 javaContext.append("}");
+		 return javaContext.toString();
+	}
+
+	private static String GetModifiers(int modifiers) {
+		if(modifiers==Modifier.PROTECTED) {
+			return "";
+		}
+		else if(modifiers==Modifier.PUBLIC) {
+			return "public";
+		}else if(modifiers==Modifier.PRIVATE) {
+			return "private";
+		}
+		return "";
+	}
+}
+```

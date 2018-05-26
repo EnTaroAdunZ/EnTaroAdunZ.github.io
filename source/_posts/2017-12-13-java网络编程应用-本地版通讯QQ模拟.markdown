@@ -1,0 +1,66 @@
+---
+layout: post
+title: "java网络编程应用-本地版通讯QQ模拟"
+date: 2017-12-13 12:22:18 +0800
+comments: true
+categories:
+tags: [网络编程,java]
+keyword: 陈浩翔, 谙忆
+description:
+---
+
+
+原题 编写一对多的聊天程序，程序由服务器和客户端两部分构成，两部分的
+交互方式如下：
+a. 客户端发送命令： <register name=”xu”/> 给服务器端注册用户，
+服务器端如果允许注册，则返回消息：<result command=”register” state=”
+ok” />，否则返回消息： <result command=” register” state=” error”
+mes
+<!-- more -->
+----------
+
+## 原题
+
+```
+ 编写一对多的聊天程序，程序由服务器和客户端两部分构成，两部分的
+交互方式如下：
+a. 客户端发送命令： <register name=”xu”/> 给服务器端注册用户，
+服务器端如果允许注册，则返回消息：<result command=”register” state=”
+ok” />，否则返回消息： <result command=” register” state=” error”
+message=”” />
+b. 客户端发送命令： <login name=”xu”/> 给服务器端进行登录, 服
+务器端如果允许登录，则返回消息： <result command=” login ” state=”
+ok” />，否则返回消息： <result command=” login” state=” error”
+message=”” />；
+c. 客户端发送命令： <message from=” xu” to=” zhang” message=”
+this is a test” > 给服务器端，服务器端收到命令后返回消息： <result
+command=” message ” state=” ok” />；
+d. 服务器向指定客户端发送命令： <message from=”xu” to=”zhang”
+message=” this is a test” >，如果客户端收到消息，则返回： <result
+command=” message ” state=” ok” />，如果 message 命令中的 from
+属性为空，则表示由服务器发送的消息。
+e. 客户端发送命令： <logout name=” xu” /> 给服务器端进行注销登
+录, 服务器端如果允许注销登录，则返回消息：<result command=” logout ”
+state=” ok” />，否则返回消息： <result command=” loginout” state=”
+error” message=”” />；
+程序可以采用 GUI，也可采用命令行的方式。 
+```
+
+## 运行截图
+![](http://othgjp7hs.bkt.clouddn.com/17-12-13/44471524.jpg)
+![](http://othgjp7hs.bkt.clouddn.com/17-12-13/22543932.jpg)
+![](http://othgjp7hs.bkt.clouddn.com/17-12-13/44682727.jpg)
+
+##　项目说明
+(1)本程序使用网络编程、多线程等内容实现了单机版的网络聊天室功能，并且使用题目中所指出的格式进行通讯，做到了分层，对对象封装等，有一定的扩展性（可以修改一部分地方以改成局域网版本）。
+本程序启动之后，先要启动服务端，客户端之间才可以进行通讯(客户端进行通讯需要服务端进行转发)。
+登录界面中的注册功能只能模拟请求，并没有真正的注册效果。
+登录界面中的用户名需要唯一，作为发送的标识符，如果重复将无法登陆。
+聊天界面中可以随时更改发送端的用户名。
+
+## 项目包结构
+![](http://othgjp7hs.bkt.clouddn.com/17-12-13/91090042.jpg)
+## 项目大体架构
+![](http://othgjp7hs.bkt.clouddn.com/17-12-13/60044127.jpg)
+## 项目地址
+https://github.com/EnTaroAdunZ/NetWord_Local_QQ.git

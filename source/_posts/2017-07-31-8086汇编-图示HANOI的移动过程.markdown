@@ -1,0 +1,431 @@
+---
+layout: post
+title: "8086汇编-图示HANOI的移动过程"
+date: 2017-07-31 10:38:42 +0800
+comments: true
+categories:
+tags: [汇编]
+keyword: 陈浩翔, 谙忆
+description: DATAS SEGMENT
+    ZHUZI_A DW 0,100 dup(?);表示当前柱子上有哪几个盘
+    ZHUZI_B DW 0,100 dup(?);表示当前柱子上有哪几个盘
+    ZHUZI_C DW 0,100 dup(?);表示当前柱子上有哪几个盘
+    tip     db 'input n:',0ah,0dh,'$' ;提示
+    n   db  0 ;多少重 
+---
+
+
+DATAS SEGMENT
+    ZHUZI_A DW 0,100 dup(?);表示当前柱子上有哪几个盘
+    ZHUZI_B DW 0,100 dup(?);表示当前柱子上有哪几个盘
+    ZHUZI_C DW 0,100 dup(?);表示当前柱子上有哪几个盘
+    tip     db 'input n:',0ah,0dh,'$' ;提示
+    n   db  0 ;多少重
+<!-- more -->
+----------
+
+```
+DATAS SEGMENT
+	ZHUZI_A DW 0,100 dup(?);表示当前柱子上有哪几个盘
+	ZHUZI_B DW 0,100 dup(?);表示当前柱子上有哪几个盘
+	ZHUZI_C DW 0,100 dup(?);表示当前柱子上有哪几个盘
+	tip     db 'input n:',0ah,0dh,'$' ;提示
+	n	db	0 ;多少重
+	tempn db 0;临时存放N值
+	len_left dw 0;哪里开始打印
+	len_right dw 0;哪里结束打印
+	charA dw 1;当前A对应哪个柱子
+	charB dw 2;当前B对应哪个柱子
+	charC dw 3;当前C对应哪个柱子
+	mover dw 0;偏移位置
+DATAS ENDS
+STACKS SEGMENT
+	dw 80 dup(?)
+STACKS ENDS
+;**************************************************************
+;如果需要调节速度，请到最下方的子程序sleep中调节
+;7,8层以上推荐将dx设置为1
+;递归中没有使用栈放参数，不会轻易出现栈溢出
+;请输入十进制的数，并输入回车结束
+;18层以上的效果将显示不完整或者不完美
+;**************************************************************
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+main proc far 
+START:
+	push     ds 
+	sub      ax,ax 
+	push     ax 
+	mov      bx,0 
+	mov      ax,DATAS 
+	mov      ds,ax;DOS返回数据 
+	lea      dx,tip 
+	mov      ah,09h;显示提示 
+	int      21h
+input: 
+	mov      ah,1 
+	int      21h;接受输入
+	cmp al,0DH
+	jz exitInput
+	sub      al,30h
+	mov bl,al
+	xor bh,bh
+	xor ax,ax
+	mov al,n
+	mov cl,10
+	mul cl
+	add ax,bx
+	mov n,al
+	jmp input
+exitInput:
+	;初始化
+	call init
+	call Print
+	call hanoi
+    ret 
+main     endp
+;------------------------------------------------------------------
+hanoi     proc        near
+	push ax
+	XOR AH,AH
+	MOV AL,n
+	cmp ax,1
+	jnz	dfs
+	call move
+	call Print
+	jmp exitDfs
+dfs:
+	call Store1
+	call hanoi
+	call REC1
+	call Store3
+	call hanoi
+	call REC3
+	call Store2
+	call hanoi
+	call REC2
+exitDfs:
+pop ax
+ret
+hanoi  ENDP
+;------------------------------------------------------------------
+move     PROC    FAR
+	PUSH AX
+	PUSH BX
+	PUSH SI
+	PUSH DI
+	PUSH DX
+	mov AX,charA  
+	mov BX,charC
+	;SI
+	cmp AX,1
+	jnz exitJudCharA_1
+	lea si,ZHUZI_A
+	jmp exitJudCharA
+exitJudCharA_1:
+	cmp AX,2
+	jnz exitJudCharA_2
+	lea si,ZHUZI_B
+	jmp exitJudCharA
+exitJudCharA_2:
+	lea si,ZHUZI_C
+exitJudCharA:
+	;DI
+	cmp BX,1
+	jnz exitJudCharC_1
+	lea di,ZHUZI_A
+	jmp exitJudCharC
+exitJudCharC_1:
+	cmp BX,2
+	jnz exitJudCharC_2
+	lea di,ZHUZI_B
+	jmp exitJudCharC
+exitJudCharC_2:
+	lea di,ZHUZI_C
+exitJudCharC:
+	;结束
+	MOV AX,[SI]
+	MOV BX,[DI]
+	ADD AX,AX
+	ADD BX,BX
+	ADD BX,2
+	MOV mover,AX
+	add si,mover
+	MOV DX,[SI]
+	sub si,mover
+	add DI,BX
+	MOV [DI],DX
+	sub DI,BX
+	MOV DX,[DI]
+	inc dx
+	MOV [DI],DX
+	MOV DX,[SI]
+	dec dx
+	MOV [SI],DX
+	POP DX
+	POP DI
+	POP SI
+	POP BX
+	POP AX 
+    RET 
+move  ENDP 
+;------------------------------------------------------------------ 
+Print     PROC    FAR
+	push ax
+	push bx
+	push cx
+	push dx
+	push si
+	mov	ah,0;把屏幕分为320*200像素，四色 
+	mov	al,04h 
+	int 10h;取光笔
+	MOV DX,180
+	MOV CX,50
+	LEA SI,ZHUZI_A
+	MOV BX,[SI]
+PrintA:
+	cmp bx,0
+	jz exitA
+	PUSH BX
+	PUSH AX
+	add si,2
+	MOV AX,[SI]
+	xor bx,bx
+	MOV BL,2
+	MUL BL
+	MOV CX,50
+	SUB CX,AX
+	SUB CX,5
+	MOV len_left,CX
+	MOV CX,50
+	ADD CX,AX
+	ADD CX,5
+	MOV len_right,CX
+	POP AX
+	POP BX
+	MOV CX,len_left
+PrintA_1:
+	mov         al,5 
+	mov         ah,0ch 
+    int	10h
+    inc cx
+    cmp cx,len_right
+    jbe PrintA_1
+    sub dx,5
+	sub bx,1
+	jnz PrintA
+exitA:
+	MOV DX,180
+	LEA SI,ZHUZI_B
+	MOV BX,[SI]
+PrintB:
+	cmp bx,0
+	jz exitB
+	PUSH BX
+	PUSH AX
+	add si,2
+	MOV AX,[SI]
+	xor bx,bx
+	MOV BL,2
+	MUL BL
+	MOV CX,150
+	SUB CX,AX
+	SUB CX,5
+	MOV len_left,CX
+	MOV CX,150
+	ADD CX,AX
+	ADD CX,5
+	MOV len_right,CX
+	POP AX
+	POP BX
+	MOV CX,len_left
+PrintB_1:
+	mov         al,5 
+	mov         ah,0ch 
+    int	10h
+    inc cx
+    cmp cx,len_right
+    jbe PrintB_1
+    sub dx,5
+	sub bx,1
+	jnz PrintB
+exitB:
+	MOV DX,180
+	LEA SI,ZHUZI_C
+	MOV BX,[SI]
+PrintC:
+	cmp bx,0
+	jz exitC
+	PUSH BX
+	PUSH AX
+	add si,2
+	MOV AX,[SI]
+	xor bx,bx
+	MOV BL,2
+	MUL BL
+	MOV CX,250
+	SUB CX,AX
+	SUB CX,5
+	MOV len_left,CX
+	MOV CX,250
+	ADD CX,AX
+	add CX,5
+	MOV len_right,CX
+	POP AX
+	POP BX
+	MOV CX,len_left
+PrintC_1:
+	mov         al,5 
+	mov         ah,0ch 
+    int	10h
+    inc cx
+    cmp cx,len_right
+    jbe PrintC_1
+    sub dx,5
+	sub bx,1
+	jnz PrintC
+	exitC:
+;打印柱子
+;------------------------------------------------------------------
+	MOV CX,50
+	MOV DX,50
+printZhuZi1:
+	mov         al,6 
+	mov         ah,0ch 
+    int	10h 
+	inc DX
+	cmp DX,180
+	jbe printZhuZi1
+	add CX,100
+	MOV DX,50
+printZhuZi2:
+	mov         al,6 
+	mov         ah,0ch 
+    int	10h 
+	inc DX
+	cmp DX,180
+	jbe printZhuZi2
+	add CX,100
+	MOV DX,50
+printZhuZi3:
+	mov         al,6 
+	mov         ah,0ch 
+    int	10h 
+	inc DX
+	cmp DX,180
+	jbe printZhuZi3
+	call sleep
+;------------------------------------------------------------------
+	pop si
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+    RET 
+Print  ENDP 
+;------------------------------------------------------------------ 
+Store1	proc	near
+	PUSH AX
+	PUSH BX
+	MOV AX,charB
+	MOV BX,charC
+	MOV charB,BX
+	MOV charC,AX
+	dec n
+	POP BX
+	POP AX
+	ret
+Store1  endp
+REC1 proc near
+	PUSH AX
+	PUSH BX
+	MOV AX,charB
+	MOV BX,charC
+	MOV charB,BX
+	MOV charC,AX
+	INC N
+	POP BX
+	POP AX
+	ret
+REC1  endp
+;------------------------------------------------------------------ 
+Store2	proc	near
+	PUSH AX
+	PUSH BX
+	MOV AX,charA
+	MOV BX,charB
+	MOV charA,BX
+	MOV charB,AX
+	dec n
+	POP BX
+	POP AX
+	ret
+Store2  endp
+REC2 proc near
+	PUSH AX
+	PUSH BX
+	MOV AX,charA
+	MOV BX,charB
+	MOV charA,BX
+	MOV charB,AX
+	INC N
+	POP BX
+	POP AX
+	ret
+REC2  endp
+;------------------------------------------------------------------
+Store3	proc	near
+	PUSH AX
+	xor ax,ax
+	MOV Al,n
+	MOV tempn,Al
+	mov n,1
+	POP AX
+	ret
+Store3  ENDP
+REC3 proc near
+	PUSH AX
+	xor ax,ax
+	MOV Al,tempn
+	MOV n,Al
+	POP AX
+	ret
+REC3  ENDP
+;------------------------------------------------------------------
+init	proc	near
+;下面开始初始化三个数
+	MOV AX,DATAS	
+	MOV DS,AX
+	LEA SI,ZHUZI_A
+	xor ah,ah
+	mov al,n
+	MOV [SI],ax
+	xor cx,cx
+	mov cl,n
+initZhuZiA:
+	add si,2
+	MOV [SI],cx
+loop initZhuZiA
+	ret 
+init	endp
+;------------------------------------------------------------------
+
+sleep	proc
+
+ret
+sleep	endp
+CODES ENDS
+end
+
+
+
+
+
+
+
+
+
+
+
+
+```
