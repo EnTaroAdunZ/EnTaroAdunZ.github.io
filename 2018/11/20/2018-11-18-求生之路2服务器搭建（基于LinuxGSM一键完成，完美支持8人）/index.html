@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2017 | 卡莱折跃研究所</title>
+  <title>求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人） | 卡莱折跃研究所</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="卡莱折跃研究所">
-<meta property="og:url" content="http://yoursite.com/archives/2017/index.html">
+  <meta name="description" content="本文将介绍如何从0搭建属于自己的求生之路服务器（其他在LinuxGSM的游戏也可以用相同的方式搭建），需要有一定的linux基础和云服务器知识。">
+<meta name="keywords" content="服务器部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）">
+<meta property="og:url" content="http://yoursite.com/2018/11/20/2018-11-18-求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）/index.html">
 <meta property="og:site_name" content="卡莱折跃研究所">
+<meta property="og:description" content="本文将介绍如何从0搭建属于自己的求生之路服务器（其他在LinuxGSM的游戏也可以用相同的方式搭建），需要有一定的linux基础和云服务器知识。">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://jijiantuchuang1.oss-cn-shenzhen.aliyuncs.com/18-11-21/29355376.jpg">
+<meta property="og:updated_time" content="2018-11-20T16:02:55.811Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="卡莱折跃研究所">
+<meta name="twitter:title" content="求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）">
+<meta name="twitter:description" content="本文将介绍如何从0搭建属于自己的求生之路服务器（其他在LinuxGSM的游戏也可以用相同的方式搭建），需要有一定的linux基础和云服务器知识。">
+<meta name="twitter:image" content="http://jijiantuchuang1.oss-cn-shenzhen.aliyuncs.com/18-11-21/29355376.jpg">
   
     <link rel="alternative" href="/atom.xml" title="卡莱折跃研究所" type="application/atom+xml">
   
@@ -142,361 +149,187 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2018-11-18-求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）
+    </h1>
+  
+
+        
+        <a href="/2018/11/20/2018-11-18-求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）/" class="archive-article-date">
+  	<time datetime="2018-11-20T02:38:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-20</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="http://jijiantuchuang1.oss-cn-shenzhen.aliyuncs.com/18-11-21/29355376.jpg" alt=""></p>
+<p>本文将介绍如何从0搭建属于自己的求生之路服务器（其他在LinuxGSM的游戏也可以用相同的方式搭建），需要有一定的linux基础和云服务器知识。</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><a id="more"></a></h2><h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><p>你先要拥有自己的云服务器（并且能连接网络），在部署时确保自己的服务器安全组关闭、防火墙关闭（如果害怕安全问题的话请开放27005和27015两个端口，其他端口的开放请自行查询），能ping到github（如果不行请修改DNS或者host）<br>我使用的是centos7.5版本（兼容GMS最新版），下载相关远程连接工具（我使用的是xftp和xshell）</p>
+<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>进入<a href="https://linuxgsm.com/lgsm/l4d2server/" target="_blank" rel="noopener">https://linuxgsm.com/lgsm/l4d2server/</a><br>下面这一步要根据自己的系统，安装需要的依赖，其他系统请到官方链接查找，我这个是centos64位的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install mailx postfix curl wget bzip2 gzip unzip python binutils bc jq tmux glibc.i686 libstdc++ libstdc++.i686</span><br></pre></td></tr></table></figure></p>
+<p>下面是统一都需要运行的指令，在这个过程中，遇到y or n的都选y，注意安装中注意出现的错误提醒，如果则要根据此前排插问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">adduser l4d2server</span><br><span class="line">passwd l4d2server</span><br><span class="line">su - l4d2server</span><br><span class="line">wget -O linuxgsm.sh https://linuxgsm.sh &amp;&amp; chmod +x linuxgsm.sh &amp;&amp; bash linuxgsm.sh l4d2server</span><br><span class="line">./l4d2server install</span><br></pre></td></tr></table></figure></p>
+<p>通过以下指令操作服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./l4d2server st  //启动服务端</span><br><span class="line">./l4d2server sp  //停止服务端</span><br><span class="line">./l4d2server r   //重启服务端</span><br><span class="line">./l4d2server c   //进入服务端控制台</span><br></pre></td></tr></table></figure></p>
+<h3 id="第三步（非必须）"><a href="#第三步（非必须）" class="headerlink" title="第三步（非必须）"></a>第三步（非必须）</h3><p>安装完成后，其实这个时候就可以启动服务器，并且通过IP直连，但是我们想绑定自己的组、开启多人支持、并且开启管理员功能等，怎么做呢？<br>下载如下网站的插件最新版，具体功能请自行查看：<br><a href="https://www.sourcemod.net/downloads.php?branch=stable" target="_blank" rel="noopener">https://www.sourcemod.net/downloads.php?branch=stable</a><br><a href="http://www.sourcemm.net/" target="_blank" rel="noopener">http://www.sourcemm.net/</a><br><a href="https://forums.alliedmods.net/showpost.php?p=1984946&amp;postcount=1211?p=1984946&amp;postcount=1211" target="_blank" rel="noopener">https://forums.alliedmods.net/showpost.php?p=1984946&amp;postcount=1211?p=1984946&amp;postcount=1211</a><br>你可以直接在服务器解压，不过一定要确保位置正确，我的话是先在win解压，然后合并最后再上传过去（确保上传所用用户是l4d2server省去麻烦），这里我压缩了一份，不过还是建议使用最新版进行部署<br><a href="https://download.csdn.net/download/entaroadunz/10792193" target="_blank" rel="noopener">https://download.csdn.net/download/entaroadunz/10792193</a></p>
+<h3 id="第四步（非必须）"><a href="#第四步（非必须）" class="headerlink" title="第四步（非必须）"></a>第四步（非必须）</h3><p>以下的路径前提都是以自动创建的l4d2server home目录为准。<br>首先是服务器配置文件的位置：<br>/home/l4d2server/serverfiles/left4dead2/cfg下的l4d2server.cfg，我的配置文件中只包含服务器名称和8人扩展<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// Hostname for server.</span><br><span class="line">hostname &quot;服务器名字，尽量用英文，避免编码错误&quot;</span><br><span class="line">// RCON - remote console password.</span><br><span class="line">rcon_password &quot;&quot;</span><br><span class="line">// Server password - for private servers.</span><br><span class="line">sv_password &quot;&quot;</span><br><span class="line">// Server Logging</span><br><span class="line">log on</span><br><span class="line">sv_logbans 1</span><br><span class="line">sv_logecho 1</span><br><span class="line">sv_logfile 1</span><br><span class="line">sv_log_onefile 0</span><br><span class="line">sv_steamgroup &quot;你的steam组ID&quot;</span><br><span class="line">sv_maxplayers &quot;8&quot;</span><br><span class="line">sv_visiblemaxplayers &quot;8&quot;</span><br><span class="line">sv_removehumanlimit 1</span><br><span class="line">sv_steamgroup_exclusive &quot;1&quot;</span><br></pre></td></tr></table></figure></p>
+<p>然后这里我们需要配置服务器管理员，地址是：<br>/home/l4d2server/serverfiles/left4dead2/addons/sourcemod/configs下的admins_simple.ini<br>查看里面的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">////////////////////////////////</span><br><span class="line">// Examples: (do not put // in front of real lines, as // means &apos;comment&apos;)</span><br><span class="line">//</span><br><span class="line">//   &quot;STEAM_0:1:16&quot;		&quot;bce&quot;				//generic, kick, unban for this steam ID, no immunity</span><br><span class="line">//   &quot;!127.0.0.1&quot;		&quot;99:z&quot;				//all permissions for this ip, immunity value is 99</span><br><span class="line">//   &quot;BAILOPAN&quot;			&quot;abc&quot;	&quot;Gab3n&quot;		//name BAILOPAN, password &quot;Gab3n&quot;: gets reservation, generic, kick</span><br><span class="line">//</span><br><span class="line">////////////////////////////////</span><br></pre></td></tr></table></figure></p>
+<p>可以看到官网已经给了我们一些实例，那我们要去哪里查自己的steamid呢？<br>这里推荐<a href="https://steamidfinder.com/" target="_blank" rel="noopener">https://steamidfinder.com/</a><br>首先你在自己的个人资料页右键复制，将URL复制到这里，然后就可以看到自己的steamid了，当然别人的也可以这样找<br>最后在这个文件下面新建一行<br>“你找到的steamid” “权限 一般所有吧 99:z” “密码，可有可无”<br>进入服务器输入!admin，就可以使用该功能了</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/24/2017-11-24-一天入门redis-RDB、AOF/" class="archive-article-date">
-  	<time datetime="2017-11-24T03:50:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/24/2017-11-24-一天入门redis-RDB、AOF/">一天入门redis-RDB、AOF</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">服务器部署</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/11/20/2018-11-18-求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/23/2017-11-23-使用反射获取class并生成相应代码/" class="archive-article-date">
-  	<time datetime="2017-11-23T02:32:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/04/02/感谢你来玩我的游戏，感谢你来看我的电影，感谢游戏来到我的世界/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">感谢你来玩我的游戏，感谢你来看我的电影，感谢游戏来到我的世界</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/23/2017-11-23-使用反射获取class并生成相应代码/">使用反射获取class并生成相应代码</a>
-    </h1>
+  
+  
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script>
+  var cloudTieConfig = {
+    url: "http://yoursite.com/2018/11/20/2018-11-18-求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）/", 
+    sourceId: "2018-11-18-求生之路2服务器搭建（基于LinuxGSM一键完成，完美支持8人）",
+    productKey: "true",
+    target: "cloud-tie-wrapper"
+  };
+</script>
+<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">class</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/23/2017-11-23-序列化对象后单例模式被破坏解决方案/" class="archive-article-date">
-  	<time datetime="2017-11-23T02:31:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/23/2017-11-23-序列化对象后单例模式被破坏解决方案/">序列化对象后单例模式被破坏解决方案</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">对象</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">class</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/23/2017-11-23-java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版/" class="archive-article-date">
-  	<time datetime="2017-11-23T02:30:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/23/2017-11-23-java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版/">java.lang.NoClassDefFoundError net.sf.ezmorph.Morpher问题解决-pom版</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jdk</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/23/2017-11-23-JAVA-任意对象转换成JSON，json转换成指定对象/" class="archive-article-date">
-  	<time datetime="2017-11-23T02:29:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/23/2017-11-23-JAVA-任意对象转换成JSON，json转换成指定对象/">JAVA-任意对象转换成JSON，json转换成指定对象</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">对象</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">class</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/15/2017-08-15-基于JAVAFX仿网易云音乐播放器/" class="archive-article-date">
-  	<time datetime="2017-08-15T03:55:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/15/2017-08-15-基于JAVAFX仿网易云音乐播放器/">基于JAVAFX仿网易云音乐播放器</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">javafx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/07/2017-08-07-PowerDesigner16.5 自定义默认值去除引号/" class="archive-article-date">
-  	<time datetime="2017-08-07T00:51:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/07/2017-08-07-PowerDesigner16.5 自定义默认值去除引号/">PowerDesigner16.5 自定义默认值去除引号</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">powerdesigner</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/01/2017-08-01-初识UML(1)/" class="archive-article-date">
-  	<time datetime="2017-07-31T18:42:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/01/2017-08-01-初识UML(1)/">初识UML(1)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/" class="archive-article-date">
-  	<time datetime="2017-07-31T02:38:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-31</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/31/2017-07-31-8086汇编-图示HANOI的移动过程/">8086汇编-图示HANOI的移动过程</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">汇编</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -519,8 +352,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
